@@ -1,116 +1,440 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AlignedGen</title>
+    <meta charset="utf-8">
+    <meta name="description"
+          content="Aligning Style Across Generated Images">
+    <meta name="keywords" content="Diffusion, Style, Generation">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AlignedGen</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+        function gtag() {
+            dataLayer.push(arguments);
+        }
 
-    gtag('js', new Date());
+        gtag('js', new Date());
 
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
+        gtag('config', 'G-PYVRSFMDRL');
+    </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+          rel="stylesheet">
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="icon" href="./static/images/favicon.svg">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+
+
+    <!-- ================================================== -->
+    <!-- ==                CSS 代码放在这里                == -->
+    <!-- ================================================== -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+
+
+        @media (max-width: 768px) {
+            width: 95%;
+            padding: 1rem;
+        }
+
+        .slide-group {
+            display: none;
+            padding: 1.5rem;
+        }
+
+        .slide-group.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .image-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+
+        .prompt-box {
+            margin-top: 0.75rem;
+            padding: 0.6rem;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+            font-size: 0.85rem;
+            color: #333;
+            width: 100%;
+            height: 40%;
+            box-sizing: border-box;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-btn:hover {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0 2rem;
+            gap: 0.5rem;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .indicator.active {
+            background: #333;
+        }
+
+        @media (max-width: 768px) {
+            .slide-group.active {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .carousel-btn {
+                font-size: 1.2rem;
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        .slide-group.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            overflow: visible; /* 👈 允许图像溢出 */
+        }
+
+        .image-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow: visible; /* 👈 关键：允许子元素放大时溢出 */
+            z-index: 1;
+        }
+
+        .carousel-image {
+            width: 100%;
+            max-height: 800px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* 👈 平滑过渡 */
+        }
+
+        .image-item:hover .carousel-image {
+            transform: scale(1.08); /* 👈 悬停放大 8% */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* 👈 阴影加深，增强悬浮感 */
+            z-index: 10; /* 👈 置于顶层，避免被裁剪 */
+        }
+
+        .prompt-box {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+            font-size: 0.95rem;
+            color: #333;
+            width: 100%;
+            box-sizing: border-box;
+            transition: transform 0.3s ease; /* 可选：文字框也轻微上浮 */
+        }
+
+        .image-item:hover .prompt-box {
+            transform: translateY(-2px); /* 可选：悬停时文字框轻微上浮 */
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 1400px) {
+            .carousel-container {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .slide-group.active {
+                grid-template-columns: 1fr;
+            }
+
+            .image-item:hover .carousel-image {
+                transform: scale(1.05); /* 手机端放大效果减弱 */
+            }
+        }
+
+
+        .slide-group.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 👈 水平居中 */
+            justify-content: center; /* 👈 垂直居中（可选） */
+            overflow: visible;
+            width: 100%; /* 👈 确保占满容器宽度 */
+        }
+
+        .image-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow: visible;
+            margin: 3rem 0; /* 加大间距，更呼吸感 */
+            width: 100%; /* 👈 关键：让 item 占满宽度 */
+            max-width: 1000px; /* 限制最大宽度，避免过大 */
+        }
+
+        .carousel-image {
+            width: 100%; /* 👈 占满父容器 */
+            max-width: 100%; /* 👈 防止溢出 */
+            height: auto; /* 👈 保持比例 */
+            max-height: 1000px; /* 👈 放大图像高度（原500px → 600px） */
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block; /* 👈 确保是块级元素 */
+            margin: 0 auto; /* 👈 强制居中（双重保险） */
+        }
+
+        .image-item:hover .carousel-image {
+            transform: scale(1.05); /* 👈 放大比例从 1.03 → 1.05，更明显 */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+            z-index: 10;
+        }
+
+        .prompt-box {
+            margin-top: 1.5rem;
+            padding: 1.2rem 2rem;
+            background: #f9f9f9;
+            border: 1px solid #e9e9e9;
+            border-radius: 12px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.25rem;
+            color: #222;
+            width: 100%;
+            max-width: 800px;
+            box-sizing: border-box;
+            text-align: center;
+            line-height: 1.6;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .image-item:hover .prompt-box {
+            transform: translateY(-5px); /* 上浮更明显 */
+            background: #f0f0f0;
+        }
+
+        .carousel-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0.01rem auto;
+            position: relative;
+            border-radius: 1px;
+            background: transparent;
+            padding: 0;
+            overflow: visible; /* 👈 允许悬停放大时轻微溢出 */
+        }
+
+    </style>
+
+    <style>
+        .results-carousel .slider-pagination {
+            bottom: 10pt !important;
+        }
+
+
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: #b0b0b0; /* 悬停时边框变深一点，增强反馈 */
+        }
+
+        .card-header {
+            background-color: #f7f9fc;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem;
+        }
+
+        .card-header-title {
+            font-size: 1.25rem;
+            color: #2c3e50;
+        }
+
+        .image.is-128x128,
+        .image.is-256x256 {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0px;
+        }
+
+
+        .card .content,
+        .card .card-header,
+        .card .card-content {
+            text-align: center;
+        }
+
+        .card .is-flex {
+            justify-content: center !important;
+        }
+
+        .columns.is-centered .column,
+        .card .column {
+            text-align: center;
+        }
+
+        .card h2, .card p, .card .title, .card .subtitle {
+            text-align: center;
+        }
+
+        .image {
+            display: inline-block;
+        }
+    </style>
+
+    <!-- ================================================== -->
+
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-<!--  <div class="navbar-menu">-->
-<!--    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">-->
-<!--      <a class="navbar-item" href="https://keunhong.com">-->
-<!--      <span class="icon">-->
-<!--          <i class="fas fa-home"></i>-->
-<!--      </span>-->
-<!--      </a>-->
-<!--      <div class="navbar-item has-dropdown is-hoverable">-->
-<!--        <a class="navbar-link">-->
-<!--          More Research-->
-<!--        </a>-->
-<!--        <div class="navbar-dropdown">-->
-<!--          <a class="navbar-item" href="https://hypernerf.github.io">-->
-<!--            HyperNeRF-->
-<!--          </a>-->
-<!--          <a class="navbar-item" href="https://nerfies.github.io">-->
-<!--            Nerfies-->
-<!--          </a>-->
-<!--          <a class="navbar-item" href="https://latentfusion.github.io">-->
-<!--            LatentFusion-->
-<!--          </a>-->
-<!--          <a class="navbar-item" href="https://photoshape.github.io">-->
-<!--            PhotoShape-->
-<!--          </a>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-</nav>
+
+<section class="hero.is-small mt-0 mb-0">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
+                    <h1 class="title is-1 publication-title">AlignedGen: Aligning Style Across Generated Images</h1>
+
+                    <!-- NeurIPS 2025 Accept Badge -->
+                    <div class="has-text-centered mb-4">
+
+                        <p class="is-size-4 has-text-weight-bold">
+                            <!--
+                              - 用 <span> 包裹图标，以便单独设置样式。
+                              - font-size: 2.25rem;  让图标比文字大一些。你可以调整这个值。
+                              - vertical-align: middle;  这是关键！让图标和文字垂直居中对齐。
+                              - margin-right: 0.5rem;  在图标右侧增加一点空隙，避免拥挤。
+                            -->
+                            <span style="font-size: 1.75rem; vertical-align: bottom; margin-right: 0.5rem;">🏆</span>
+                            NeurIPS 2025
+                        </p>
+                    </div>
+
+                    <div class="has-text-centered mb-4">
+
+                        <p class="is-size-5 has-text-weight-bold">
+                            TL;DR: Input a set of prompts, AlignedGen can generate images with consist style.
+                        </p>
+                    </div>
 
 
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">AlignedGen: Aligning Style Across Generated Images</h1>
-          <div class="is-size-5 publication-authors">
+                    <div class="is-size-5 publication-authors">
+
+
+
             <span class="author-block">
-              <a href="https://olddddddd.github.io/jiexuan.github.io/AlignedGen/">Jiexuan Zhang</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://olddddddd.github.io/jiexuan.github.io/AlignedGen/">Yiheng Du</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://akaneqwq.github.io/">Qian Wang</a><sup>1</sup>,
+              <a href="https://jiexuanz.github.io/AlignedGen/">Jiexuan Zhang</a>,
             </span>
-            <span class="author-block">
-              <a href="https://olddddddd.github.io/jiexuan.github.io/AlignedGen/">Weiqi Li</a><sup>1</sup>,
+                        <span class="author-block">
+              <a href="https://jiexuanz.github.io/AlignedGen/">Yiheng Du</a>,
             </span>
-            <span class="author-block">
-              <a href="https://www.jianzhang.tech/">Jian Zhang</a><sup>1</sup>,
+                        <span class="author-block">
+              <a href="https://akaneqwq.github.io/">Qian Wang</a>,
             </span>
-          </div>
+                        <span class="author-block">
+              <a href="https://jiexuanz.github.io/AlignedGen/">Weiqi Li</a>,
+            </span>
+                        <span class="author-block">
+              <a href="https://jiexuanz.github.io/AlignedGen/">Yu Gu</a>,
+            </span>
+                        <span class="author-block">
+              <a href="https://www.jianzhang.tech/">Jian Zhang</a>
+              <sup>
+                <i class="fas fa-envelope fa-xs" style="color: #000000;"></i>
+              </sup>
+            </span>
+                    </div>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Peking University</span>
-          </div>
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block">Peking University</span>
+                    </div>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
+                    <div class="is-size-6 publication-authors">
+            <span>
+              <sup>
+                <i class="fas fa-envelope fa-xs" style="color: #000000;"></i>
+              </sup>
+              Corresponding author
+            </span>
+                    </div>
+
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+                            <!-- PDF Link. -->
+                            <span class="link-block">
                 <a href="https://arxiv.org/pdf/2011.12948"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -119,7 +443,8 @@
                   <span>Paper</span>
                 </a>
               </span>
-              <span class="link-block">
+                            <!-- Paper Link. -->
+                            <span class="link-block">
                 <a href="https://arxiv.org/abs/2011.12948"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -128,18 +453,8 @@
                   <span>arXiv</span>
                 </a>
               </span>
-              <!-- Video Link. -->
-<!--              <span class="link-block">-->
-<!--                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"-->
-<!--                   class="external-link button is-normal is-rounded is-dark">-->
-<!--                  <span class="icon">-->
-<!--                      <i class="fab fa-youtube"></i>-->
-<!--                  </span>-->
-<!--                  <span>Video</span>-->
-<!--                </a>-->
-<!--              </span>-->
-              <!-- Code Link. -->
-              <span class="link-block">
+                            <!-- Code Link. -->
+                            <span class="link-block">
                 <a href="https://github.com/google/nerfies"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -148,334 +463,397 @@
                   <span>Code</span>
                   </a>
               </span>
-              <!-- Dataset Link. -->
-<!--              <span class="link-block">-->
-<!--                <a href="https://github.com/google/nerfies/releases/tag/0.1"-->
-<!--                   class="external-link button is-normal is-rounded is-dark">-->
-<!--                  <span class="icon">-->
-<!--                      <i class="far fa-images"></i>-->
-<!--                  </span>-->
-<!--                  <span>Data</span>-->
-<!--                  </a>-->
+                        </div>
+
+                    </div>
+                </div>
             </div>
-
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
-</section>
-
-
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            We present the first method capable of photorealistically reconstructing a non-rigidly
-            deforming scene using photos/videos captured casually from mobile phones.
-          </p>
-          <p>
-            Our approach augments neural radiance fields
-            (NeRF) by optimizing an
-            additional continuous volumetric deformation field that warps each observed point into a
-            canonical 5D NeRF.
-            We observe that these NeRF-like deformation fields are prone to local minima, and
-            propose a coarse-to-fine optimization method for coordinate-based models that allows for
-            more robust optimization.
-            By adapting principles from geometry processing and physical simulation to NeRF-like
-            models, we propose an elastic regularization of the deformation field that further
-            improves robustness.
-          </p>
-          <p>
-            We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
-            photos/videos into deformable NeRF
-            models that allow for photorealistic renderings of the subject from arbitrary
-            viewpoints, which we dub <i>"nerfies"</i>. We evaluate our method by collecting data
-            using a
-            rig with two mobile phones that take time-synchronized photos, yielding train/validation
-            images of the same pose at different viewpoints. We show that our method faithfully
-            reconstructs non-rigidly deforming scenes and reproduces unseen views with high
-            fidelity.
-          </p>
-        </div>
-      </div>
-    </div>
-    <!--/ Abstract. -->
-
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-    <!--/ Paper video. -->
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
-          <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
-          </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
-
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
+<section class="section.is-small mb-0">
+    <div class="container is-small mb-0">
+        <div class="has-text-centered mb-5">
+            <h2 class="title is-2" style="font-family: 'Times New Roman', serif; color: #1a1a1a;">
+                Case Show
+            </h2>
+            <p class="subtitle is-5 has-text-grey" style="font-family: 'Times New Roman', serif;">
+                Explore generated results with corresponding prompts.
             </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-
         </div>
-      </div>
-    </div>
-    <!--/ Matting. -->
 
-    <!-- Animation. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
-
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
-          </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
+        <!-- 轮播容器 -->
+        <div class="carousel-container">
+            <!-- 第一组 -->
+            <div class="slide-group active">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/99.png" alt="Image 10">
+                    <div class="prompt-box">{Rhino, Telescope, Stool, Panda} in vintage stamp style.</div>
+                </div>
             </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
-          </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/>
-        <!--/ Interpolating. -->
 
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
-        <div class="content has-text-justified">
-          <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <!--/ Re-rendering. -->
 
-      </div>
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/7.png" alt="Image 1">
+                    <div class="prompt-box">{A bear, A moose, A cute koala, A baby penguin} in kid crayon drawing style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/24.png" alt="Image 3">
+                    <div class="prompt-box">{A serene river, A rowboat, A bridge, A willow tree} in 3D render, animation studio style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/50.png" alt="Image 4">
+                    <div class="prompt-box">{A penguin, A bicycle, A tornado, A pineapple} in abstract graffiti style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/54.png" alt="Image 5">
+                    <div class="prompt-box">{A robot, A cupcake, A woman playing bascketball, A sunflower} in digital glitch art style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/64.png" alt="Image 6">
+                    <div class="prompt-box">{A kite surfing, A pizza, A child doing homework, A person doing yoga} in fluid art style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/83.png" alt="Image 7">
+                    <div class="prompt-box">{Hiking boots, Kangaroo, Ice cream cone, Hammock} in comic book style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/88.png" alt="Image 8">
+                    <div class="prompt-box">{Tree stump, Harp, Chameleon, Canyon} in blueprint style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/93.png" alt="Image 9">
+                    <div class="prompt-box">{Crystal ball, Carousel horse, Hummingbird, Glacier} in watercolor and ink wash style.</div>
+                </div>
+            </div>
+
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/96.png" alt="Image 96">
+                    <div class="prompt-box">{Anchor, Clock, Globe, Bicycle} in 3D realism style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/97.png" alt="Image 97">
+                    <div class="prompt-box">{Clock, Helicopter, Whale, Starfish} in retro poster style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/98.png" alt="Image 98">
+                    <div class="prompt-box">{Binoculars, Bus, Pillow, Cloud} in bohemian hand-drawn style.</div>
+                </div>
+            </div>
+
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/wps_doc_1.jpg" alt="Image 11">
+                    <div class="prompt-box">{lighthouse, book, cityscape, cat} in isometric illustration style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/wps_doc_2.jpg" alt="Image 12">
+                    <div class="prompt-box">{camera, fireman, house, mountain} in doodle style</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/wps_doc_3.jpg" alt="Image 13">
+                    <div class="prompt-box">{lighthouse, book, cityscape, cat} in sticker style.</div>
+                </div>
+            </div>
+
+            <div class="slide-group">
+                <div class="image-item">
+                    <img class="carousel-image" src="static/images/wps_doc_5.png" alt="Image 14">
+                    <div class="prompt-box">{lighthouse, book, cityscape, cat} in expressionism style.</div>
+                </div>
+            </div>
+
+
+            <!-- 控制按钮 -->
+            <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+        </div>
+
+        <!-- 指示器 -->
+        <div class="carousel-indicators" id="indicators"></div>
+
     </div>
-    <!--/ Animation. -->
+</section>
 
+<script>
+    let currentGroup = 0;
+    const groups = document.querySelectorAll('.slide-group');
+    const totalGroups = groups.length;
 
-    <!-- Concurrent Work. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
+    // 创建指示器
+    const indicatorsContainer = document.getElementById('indicators');
+    for (let i = 0; i < totalGroups; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('indicator');
+        dot.addEventListener('click', () => goToGroup(i));
+        indicatorsContainer.appendChild(dot);
+    }
 
-        <div class="content has-text-justified">
-          <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
-          </p>
-          <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
-          </p>
-          <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
-          </p>
-          <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
-          </p>
+    function updateIndicators() {
+        document.querySelectorAll('.indicator').forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentGroup);
+        });
+    }
+
+    function showGroup(index) {
+        if (index >= totalGroups) currentGroup = 0;
+        else if (index < 0) currentGroup = totalGroups - 1;
+        else currentGroup = index;
+
+        groups.forEach((group, i) => {
+            group.classList.toggle('active', i === currentGroup);
+        });
+
+        updateIndicators();
+    }
+
+    function moveSlide(step) {
+        showGroup(currentGroup + step);
+    }
+
+    function goToGroup(index) {
+        showGroup(index);
+    }
+
+    // 自动轮播（每 5 秒切换一组）
+    setInterval(() => {
+        showGroup(currentGroup + 1);
+    }, 5000);
+
+    // 初始化
+    updateIndicators();
+</script>
+
+<section class="section.is-small mt-5">
+    <div class="container is-max-desktop">
+        <!-- Integration Card -->
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div style="font-family: 'Times New Roman', serif; max-width: 85%; margin: 0 auto; color: #000000;">
+                        <h2 class="title is-8 mb-4">Abstract</h2>
+                    </div>
+                    <div style="max-width: 85%; margin: 0 auto; color: #000000;">
+                        <p class="has-text-centered is-size-6-desktop mt-1">
+                            Despite their generative power, diffusion models struggle to maintain style consistency
+                            across images conditioned on the same style prompt, hindering their practical deployment in
+                            creative workflows.
+                            While several training-free methods attempt to solve this, they are constrained to the U-Net
+                            architecture, which not only leads to low-quality results and artifacts like object
+                            repetition but also renders them incompatible with superior Diffusion Transformer (DiT).
+                            To address these issues, we introduce <strong>AlignedGen</strong>, a novel training-free
+                            framework that enhances style consistency across images generated by DiT models.
+                            Our work first reveals a critical insight: naive attention sharing fails in DiT due to
+                            conflicting positional signals from improper position embeddings.
+                            We introduce Shifted Position Embedding (ShiftPE), an effective solution that resolves this
+                            conflict by allocating a non-overlapping set of positional indices to each image.
+                            Building on this foundation, we develop Advanced Attention Sharing (AAS), a suite of three
+                            techniques meticulously designed to fully unleash the potential of attention sharing within
+                            the DiT.
+                            Furthermore, to broaden the applicability of our method, we present an efficient query, key,
+                            and value feature extraction algorithm, enabling our method to seamlessly incorporate
+                            external images as style references.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <!--/ Concurrent Work. -->
+</section>
 
-  </div>
+<section class="section.is-small mt-4">
+    <div class="container is-max-desktop">
+        <!-- Integration Card -->
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div style="font-family: 'Times New Roman', serif; max-width: 85%; margin: 0 auto; color: #000000;">
+
+                        <h2 class="title is-8">Method</h2>
+                        <figure class="image has-text-centered mt-0 mb-0">
+                            <img src="static/images/pipe.png" alt="AlignedGen Method Overview"
+                                 style="max-width: 100%; height: auto; border-radius: 8px;"/>
+                        </figure>
+                        <p class="has-text-centered is-size-6 mt-1">
+                            Overview of the AlignedGen framework. (a) Overall pipeline, where our ShiftPE and AAS module
+                            are integrated into specific layers of DiT, replacing the MM-Attention.
+                            (b)(c) Detailed illustrations of the ShiftPE and AAS, respectively.
+                            (d) Procedure for extracting features from a user-provided style reference image, which
+                            serve as input to the AAS module.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section.is-small mt-4">
+    <div class="container is-max-desktop">
+        <!-- Integration Card -->
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div style="font-family: 'Times New Roman', serif; max-width: 90%; margin: 0 auto; color: #000000;">
+
+                        <h2 class="title is-8">ShiftPE Analysis</h2>
+                        <figure class="image has-text-centered mt-0 mb-0">
+                            <img src="static/images/shiftpe.png" alt="AlignedGen Method Overview"
+                                 style="max-width: 100%; height: auto; border-radius: 8px;"/>
+                        </figure>
+                        <p class="has-text-centered is-size-6 mt-1">
+                            <strong>ShiftPE decouples attention from spatial location to enable semantic
+                                correspondence.</strong>
+                            We visualize attention map originating from a query point (red box).
+                            (a) RoPE exhibits a strong spatial bias, rigidly constraining attention to the same
+                            coordinates in the reference image and causing content leakage.
+                            (b) ShiftPE breaks this spatial dependency, allowing attention to focus on broader,
+                            semantically relevant regions (e.g., the surrounding snowy landscape).
+                            (c) The plot of attention weight summed by L1 distance quantitatively confirms this: ShiftPE
+                            distributes attention across a wider area, whereas RoPE's attention is sharply localized at
+                            the query's exact coordinates.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section.is-small mt-4">
+    <div class="container is-max-desktop">
+        <!-- Integration Card -->
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div style="font-family: 'Times New Roman', serif; max-width: 85%; margin: 0 auto; color: #000000;">
+
+                        <h2 class="title is-8">Compare With Others</h2>
+                        <figure class="image has-text-centered mt-0 mb-0">
+                            <img src="static/images/compare.png" alt="AlignedGen Method Overview"
+                                 style="max-width: 100%; height: auto; border-radius: 8px;"/>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section.is-small mt-4">
+    <div class="container is-max-desktop">
+        <!-- Integration Card -->
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div style="font-family: 'Times New Roman', serif; max-width: 100%; margin: 0 auto; color: #000000;">
+
+                        <h2 class="title is-8">Support User-Provided Image As Reference</h2>
+                        <figure class="image has-text-centered mt-0 mb-0">
+                            <img src="static/images/seamless.png" alt="AlignedGen Method Overview"
+                                 style="max-width: 100%; height: auto; border-radius: 8px;"/>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section.is-small mt-4">
+    <div class="container is-max-desktop">
+        <!-- Integration Card -->
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div style="font-family: 'Times New Roman', serif; max-width: 80%; margin: 0 auto; color: #000000;">
+
+                        <h2 class="title is-8">DreamBooth</h2>
+                        <figure class="image has-text-centered mt-0 mb-0">
+                            <img src="static/images/supp-dream.png" alt="AlignedGen Method Overview"
+                                 style="max-width: 80%; height: auto; border-radius: 8px;"/>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section.is-small mt-4">
+    <div class="container is-max-desktop">
+        <!-- Integration Card -->
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div style="font-family: 'Times New Roman', serif; max-width: 80%; margin: 0 auto; color: #000000;">
+
+                        <h2 class="title is-8">Depth Control</h2>
+                        <figure class="image has-text-centered mt-0 mb-0">
+                            <img src="static/images/supp-control.png" alt="AlignedGen Method Overview"
+                                 style="max-width: 80%; height: auto; border-radius: 8px;"/>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 
 <section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
+    <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>@article{park2021nerfies,
   author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
   title     = {Nerfies: Deformable Neural Radiance Fields},
   journal   = {ICCV},
   year      = {2021},
 }</code></pre>
-  </div>
+    </div>
 </section>
-
-
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
 
 </body>
 </html>
