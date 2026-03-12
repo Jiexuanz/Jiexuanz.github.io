@@ -278,8 +278,14 @@
     .hero-nav-divider { color: var(--text-secondary); font-size: 22px; font-weight: 300; user-select: none; opacity: 0.4; }
 
     /* 下滑提示动效 */
-    .scroll-indicator { position: absolute; bottom: 40px; color: var(--text-secondary); animation: bounce 2s infinite; opacity: 0.7; }
-    .scroll-indicator:hover { color: var(--link-hover); opacity: 1; }
+    .scroll-indicator {
+      position: absolute; bottom: 40px; color: var(--text-secondary); animation: bounce 2s infinite; opacity: 0.7;
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 1.5px solid var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .scroll-indicator:hover { color: var(--link-hover); opacity: 1; border-color: var(--link-hover); }
     .scroll-indicator::before, .scroll-indicator::after { display: none; }
 
     @keyframes bounce {
@@ -384,7 +390,7 @@
     </div>
 
     <a href="#about" class="scroll-indicator" aria-label="Scroll down" target="_self">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
     </a>
   </div>
 
