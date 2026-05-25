@@ -6,6 +6,9 @@
         <Conversation>
           <option name="createTime" value="1773296335957" />
           <option name="id" value="019ce0b2bc5575239725bf81fcda9410" />
+          <option name="nextBeforeCursor" value="2026-03-12 14:50:44" />
+          <option name="remoteOldestRequestAt" value="2026-03-12 14:50:44" />
+          <option name="storageSource" value="REMOTE" />
           <option name="title" value="网页设计复刻指南" />
           <option name="turns">
             <list>
@@ -185,7 +188,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -274,7 +276,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -401,7 +402,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -639,7 +639,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -740,7 +739,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -887,7 +885,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1017,7 +1014,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1168,7 +1164,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1264,7 +1259,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1350,7 +1344,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1578,7 +1571,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1683,7 +1675,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1770,7 +1761,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1857,7 +1847,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -1945,7 +1934,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2170,7 +2158,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2250,7 +2237,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2340,7 +2326,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2428,7 +2413,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2513,7 +2497,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2664,7 +2647,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2847,7 +2829,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -2996,7 +2977,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -3048,7 +3028,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -3165,7 +3144,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list>
                     <CodeReferencesBean>
@@ -3237,7 +3215,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list />
                 </option>
@@ -3303,7 +3280,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list>
                     <CodeReferencesBean>
@@ -3384,7 +3360,6 @@
                 </option>
                 <option name="answer" value="" />
                 <option name="chatMode" value="AGENT" />
-                <option name="chatResource" value="user" />
                 <option name="codeReferences">
                   <list>
                     <CodeReferencesBean>
@@ -3422,6 +3397,7 @@
                   </map>
                 </option>
                 <option name="inputToken" value="58046" />
+                <option name="latestTotalToken" value="29752" />
                 <option name="messageId" value="019d04cb1265720299dc4e4e540c9d2f" />
                 <option name="model" value="claude-4.6-opus" />
                 <option name="outputToken" value="855" />
