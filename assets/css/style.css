@@ -1,0 +1,344 @@
+/* =========================================================
+   Jiexuan Zhang — academic homepage
+   Layout & interactivity ported from jyfu-vcl.github.io,
+   extended with per-publication thumbnails.
+   ========================================================= */
+
+* { box-sizing: border-box; }
+
+html { background-color: #f3f4f6; scroll-behavior: smooth; }
+
+body {
+    font-family: Georgia, "Source Serif Pro", serif;
+    color: #1a1a1a;
+    background-color: #ffffff;
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 0 40px 60px;
+    line-height: 1.5;
+    box-shadow: 0 0 40px rgba(0,0,0,0.05);
+}
+
+img { max-width: 100%; border: none; }
+
+a { color: #527bbd; text-decoration: none; transition: color 0.2s; }
+a:hover { color: #2f6fb0; text-decoration: underline; }
+
+h1, h2, h3 {
+    color: #2a3f6b;
+    margin: 1em 0 0.3em;
+    padding: 0.3em 0 0.2em;
+    line-height: 1.1;
+}
+h2 {
+    font-size: 1.35em;
+    border-bottom: 2px solid #527bbd;
+    padding-bottom: 0.3em;
+    margin-top: 1.8em;
+}
+h3 { font-size: 1.08em; color: #3a5ba0; margin-top: 1.2em; }
+h1 { font-size: 2em; margin-bottom: 0.1em; }
+
+p  { margin: 0 0 0.7em 0; }
+ul { padding-left: 1.2em; list-style-type: square; }
+li { margin-bottom: 0.4em; }
+
+.author-name { color: #2f6fb0; font-weight: bold; }
+.name-cn { color: #2f6fb0; font-weight: bold; font-size: 1em; margin-left: 0.35em; }
+
+section { scroll-margin-top: 70px; }
+
+/* ---------- Sticky top navigation ---------- */
+.topnav {
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e0e4ea;
+    z-index: 100;
+    margin: 0 -40px 20px;
+    padding: 10px 40px;
+    display: flex;
+    gap: 20px;
+    font-size: 0.95em;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.topnav a {
+    color: #2a3f6b;
+    font-weight: 500;
+    padding: 4px 2px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+}
+.topnav a:hover,
+.topnav a.active {
+    color: #2f6fb0;
+    border-bottom-color: #2f6fb0;
+    text-decoration: none;
+}
+.topnav .nav-name { font-weight: bold; margin-right: auto; color: #2f6fb0; }
+
+/* ---------- Header / hero ---------- */
+.hero {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    padding-top: 1.2em;
+    padding-bottom: 0.5em;
+}
+.hero-photo-wrap {
+    flex-shrink: 0;
+    width: 200px;
+    align-self: stretch;
+    display: flex;
+}
+.hero-photo {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hero-photo-wrap:hover .hero-photo {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(47,111,176,0.25);
+}
+.hero-about {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.hero-about h1 { margin-top: 0; }
+.hero-meta { color: #555; margin-bottom: 0.85em; }
+.hero-bio { margin-bottom: 0.6em; }
+.hero-about .socials { margin-top: auto; padding-top: 0.75em; }
+
+#research > h2 { margin-top: 1em; }
+
+.socials a {
+    display: inline-block;
+    margin: 0 4px 4px 0;
+    padding: 6px;
+    border-radius: 6px;
+    color: #2a3f6b;
+    transition: background-color 0.2s, transform 0.2s, color 0.2s;
+}
+.socials a:hover {
+    background-color: #e9f2fb;
+    color: #2f6fb0;
+    transform: translateY(-2px);
+}
+.socials svg { width: 26px; height: 26px; vertical-align: middle; display: block; }
+
+/* ---------- Tabs (Papers / Proposals) ---------- */
+.tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e0e4ea;
+    margin: 0.5em 0 1.2em;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 1em;
+    color: #3a5ba0;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+.tab-btn:hover { background-color: #e9f2fb; color: #2f6fb0; }
+.tab-btn.active {
+    color: #2f6fb0;
+    border-bottom-color: #2f6fb0;
+    font-weight: bold;
+}
+.tab-panel { display: none; animation: fadein 0.3s ease; }
+.tab-panel.active { display: block; }
+
+@keyframes fadein {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Publication cards ---------- */
+.pub-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    margin: 0 0 1.2em;
+}
+.pub-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 18px;
+    border: 1px solid #e0e4ea;
+    border-left: 4px solid #d9dee6;
+    background-color: #ffffff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s,
+                transform 0.2s, box-shadow 0.2s;
+}
+.pub-item:hover {
+    border-color: #bcd9f0;
+    border-left-color: #2f6fb0;
+    background-color: #f1f7fc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(47,111,176,0.12);
+}
+.pub-item.active {
+    border-color: #2f6fb0;
+    border-left-color: #2f6fb0;
+    background-color: #e9f3fc;
+    box-shadow: 0 6px 20px rgba(47,111,176,0.22);
+    transform: translateY(-2px);
+}
+
+/* thumbnail (extension over jyfu's design) */
+.pub-thumb {
+    width: 160px;
+    height: 96px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #e0e4ea;
+    background: #f7f8fa;
+    transition: transform 0.3s ease;
+}
+.pub-item:hover .pub-thumb { transform: scale(1.03); }
+.pub-content { flex: 1; min-width: 0; }
+
+.pub-item .pub-tag {
+    display: inline-block;
+    background: #e8edf5;
+    color: #2a3f6b;
+    font-size: 0.78em;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 8px;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s, color 0.2s;
+}
+.pub-item:hover .pub-tag,
+.pub-item.active .pub-tag { background: #d8eafb; color: #2f6fb0; }
+.pub-title {
+    font-weight: bold;
+    color: #2a3f6b;
+    transition: color 0.2s;
+}
+.pub-title:hover { color: #2f6fb0; text-decoration: underline; }
+.pub-item.active .pub-title { color: #2f6fb0; }
+.pub-authors { display: block; margin-top: 4px; font-size: 0.95em; }
+.pub-venue { font-style: italic; color: #555; }
+.pub-links { margin-left: 6px; font-size: 0.9em; }
+.pub-links a { margin-right: 4px; }
+
+/* Status badges for publications */
+.badge {
+    display: inline-block;
+    font-size: 0.72em;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+    letter-spacing: 0.3px;
+    vertical-align: middle;
+}
+.badge-conf    { background: #e8e0ff; color: #4a2f9e; }
+.badge-preprint{ background: #f2e4d9; color: #8a4a1a; }
+.badge-first   { background: #d8eafb; color: #2f6fb0; }
+.badge-ccfa    { background: #e8e0ff; color: #4a2f9e; }
+.badge-ccfb    { background: #e0ecff; color: #1f4a8a; }
+
+/* ---------- Education / career list ---------- */
+.edu-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.edu-item {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    gap: 22px;
+    align-items: center;
+    padding: 18px 16px;
+    border: 1px solid #e8ebf0;
+    border-radius: 8px;
+    background: #fafbfc;
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.edu-item:hover {
+    background-color: #f1f7fc;
+    border-color: #d4e4f4;
+    box-shadow: 0 2px 10px rgba(47,111,176,0.08);
+}
+.edu-logo-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 18px;
+    background: #fff;
+    border: 1px solid #e8ebf0;
+    border-radius: 8px;
+}
+.edu-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.25s;
+}
+.edu-item:hover .edu-logo { transform: scale(1.04); }
+.edu-body { min-width: 0; }
+.edu-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 0.35em;
+}
+.edu-org { color: #2a3f6b; font-size: 1.12em; }
+.edu-degree { color: #333; font-size: 1.02em; margin-bottom: 0.25em; }
+.edu-detail { color: #666; font-size: 0.95em; line-height: 1.45; }
+.edu-date { color: #777; font-size: 0.95em; white-space: nowrap; flex-shrink: 0; }
+
+/* Career: square company logos in flat banner */
+#career .edu-logo {
+    width: auto;
+    height: 76px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+    text-align: center;
+    font-size: 0.88em;
+    color: #808080;
+    border-top: 1px solid #e0e4ea;
+    margin-top: 3em;
+    padding-top: 0.8em;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 700px) {
+    body { padding: 0 20px 40px; }
+    .topnav { margin: 0 -20px 16px; padding: 10px 20px; gap: 14px; }
+    .hero { flex-direction: column; align-items: stretch; }
+    .hero-photo-wrap { width: 100%; align-self: auto; max-width: 240px; margin: 0 auto; }
+    .hero-photo { min-height: 220px; max-height: 280px; }
+    .hero-about { width: 100%; text-align: left; }
+    .hero-about .socials { margin-top: 0.75em; }
+    .pub-item { flex-direction: column; align-items: stretch; }
+    .pub-thumb { width: 100%; height: 160px; }
+    .edu-item { grid-template-columns: 1fr; gap: 14px; }
+    .edu-logo-wrap { max-width: 280px; padding: 12px 16px; }
+    .edu-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
