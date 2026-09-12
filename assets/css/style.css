@@ -100,14 +100,15 @@ section { scroll-margin-top: 70px; }
 /* ---------- Header / hero ---------- */
 .hero {
     display: flex;
-    gap: 30px;
+    flex-direction: row-reverse;
+    gap: 36px;
     align-items: center;
     padding-top: 1.2em;
     padding-bottom: 0.5em;
 }
 .hero-photo-wrap {
     flex-shrink: 0;
-    width: 196px;
+    width: 150px;
     align-self: flex-start;
     aspect-ratio: 3 / 4;
     display: flex;
@@ -313,9 +314,9 @@ section { scroll-margin-top: 70px; }
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
-    background: #f7f8fa;
-    border: 1px solid #e0e4ea;
+    padding: 4px;
+    background: transparent;
+    border: none;
     border-radius: 5px;
     transition: transform 0.3s ease;
 }
@@ -340,9 +341,15 @@ section { scroll-margin-top: 70px; }
 .edu-detail { color: #666; font-size: 0.95em; line-height: 1.45; }
 .edu-date { color: #777; font-size: 0.95em; white-space: nowrap; flex-shrink: 0; }
 
-/* Career: square company logos */
-#career .edu-logo {
+/* Career: Tencent + WeChat icons */
+#career .career-icons {
+    gap: 14px;
+}
+#career .career-icons img {
+    width: 52px;
+    height: 52px;
     object-fit: contain;
+    display: block;
 }
 
 /* ---------- Footer ---------- */
@@ -360,7 +367,7 @@ section { scroll-margin-top: 70px; }
     body { padding: 0 20px 40px; }
     .topnav { margin: 0 -20px 16px; padding: 10px 20px; gap: 14px; }
     .hero { flex-direction: column; align-items: stretch; }
-    .hero-photo-wrap { width: 100%; max-width: 220px; margin: 0 auto; }
+    .hero-photo-wrap { width: 100%; max-width: 168px; margin: 0 auto; }
     .hero-about { width: 100%; text-align: left; }
     .hero-about .socials { margin-top: 0.75em; }
     .pub-item { flex-direction: column; align-items: stretch; }
