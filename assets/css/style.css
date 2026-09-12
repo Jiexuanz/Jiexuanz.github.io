@@ -269,8 +269,12 @@ section { scroll-margin-top: 70px; }
 .pub-item.active .pub-title { color: #2f6fb0; }
 .pub-authors { display: block; margin-top: 4px; font-size: 0.95em; }
 .pub-venue { font-style: italic; color: #555; }
-.pub-links { margin-left: 6px; font-size: 0.9em; }
-.pub-links a { margin-right: 4px; }
+.pub-links { margin-left: 4px; font-size: 0.9em; }
+.pub-links a {
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0 0 0 4px;
+}
 
 /* Status badges for publications */
 .badge {
