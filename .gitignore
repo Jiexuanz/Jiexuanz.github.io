@@ -14,7 +14,7 @@ paper_latex/
 # Editors / IDEs
 # ============================================
 .vscode/
-.idea/CopilotChatHistory.xml
+.idea/
 
 # ============================================
 # Misc
